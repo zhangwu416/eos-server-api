@@ -288,6 +288,31 @@ async getTransaction(){
     }
   }
 
+   /**
+   * privateKey换账户名称
+   */
+  async getAccountsByPrivateKey(){
+    const { ctx } = this;  
+    try{
+      let params = ctx.params;
+      if(!params.privatekey){
+        this.ctx.body = error("参数错误");
+        return;
+      }
+      let publicKey = ecc.privateToPublic(params.privatekey);
+      await eos.getKeyAccounts({public_key:publicKey}).then(result => {
+        if(result){
+          this.ctx.body = success(result);;
+        }else{
+          this.ctx.body = error();
+        }
+      }).catch(e=>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+      this.ctx.body = error(e);
+    }
+  }
 }
 
 module.exports = HomeController;
