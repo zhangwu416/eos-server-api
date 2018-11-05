@@ -83,4 +83,9 @@ module.exports = app => {
    */
   router.get('/transactions/:account/:page/:size', controller.home.getTransactions);
 
+   /**
+   * 私钥获得账户名称
+   * @param {私钥} privatekey
+   */
+  router.get('/account/pk/:privatekey', controller.home.getAccountsByPrivateKey);
 };
