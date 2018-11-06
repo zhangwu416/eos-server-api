@@ -445,6 +445,25 @@ async getTransaction(){
         this.ctx.body = error(e);
     }
   }
+    /**
+   *ram价格
+   */
+  async eosGetTableRows(){
+    const { ctx } = this;  
+    try{
+      await eos.getTableRows({"scope":"eosio", "code":"eosio", "table":"rammarket", "json": true}).then(result => {
+        if(result){
+          this.ctx.body = success(result);;
+        }else{
+          this.ctx.body = error();
+        }
+      }).catch(e=>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+      this.ctx.body = error(e);
+    }
+  }
 }
 
 module.exports = HomeController;
