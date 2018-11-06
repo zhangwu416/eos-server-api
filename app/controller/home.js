@@ -9,27 +9,27 @@ const binaryen = require('binaryen');
 /**
  * 私钥
  */
-const pk = "5KQwrPbwdL6PhXujxW37FSSQZ1JiwsST4cqQzDeyXtP79zkvFD3";
+const pk = "5JF68Gsp3SLCXZ3xjvnumcUGLG93Z5PG75oRqdWdAWeY8MSA9xM";
 
 /**
  * eos服务
  */
-const eosServer = "http://54.238.242.48:8888"; 
+const eosServer = "http://jungle.cryptolions.io:18888"; 
 
 /**
  * 主账户
  */
-const mainAccount = "eosio";
+const mainAccount = "mynamezhangw";
 
 /**
  * 给用户抵押的数量-用于网络使用
  */
-const stake_net_quantity = "1 SYS";
+const stake_net_quantity = "1 EOS";
 
 /**
  * 给用户抵押的数量-用于cpu使用
  */
-const stake_cpu_quantity = "1 SYS";
+const stake_cpu_quantity = "1 EOS";
 
 const eos = Eos.Localnet({binaryen,keyProvider:[pk],httpEndpoint:eosServer});
 
@@ -169,17 +169,20 @@ class HomeController extends Controller {
         this.ctx.body = error("参数错误");
         return;
       }
-      const eoss = Eos.Localnet({binaryen,keyProvider:[params.pk],httpEndpoint:eosServer});
+      
+      let info = await eos.getInfo({});
+      const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
       await eoss.transfer({from:params.from, to:params.to, quantity:params.quantity, memo:params.mome}).then((r)=>{
-        this.ctx.body = success(r);
+        ctx.body = success(r);
       }).catch((e)=>{
-        this.ctx.body = error(e);
+        ctx.body = error(e);
       });
+      
     }catch(e){
       this.ctx.body = error(e);
     }
   }
-
+  
   /**
    * 查询账户
    */
@@ -288,8 +291,8 @@ async getTransaction(){
     }
   }
 
-   /**
-   * privateKey换账户名称
+  /**
+   * privateKey换publickey
    */
   async getAccountsByPrivateKey(){
     const { ctx } = this;  
@@ -311,6 +314,135 @@ async getTransaction(){
       });
     }catch(e){
       this.ctx.body = error(e);
+    }
+  }
+  
+  /**
+   * buyram
+   */
+  async eosBuyRam(){
+    const { ctx } = this;
+    try{
+      let params = ctx.request.body;
+      if(!params.from || !params.pk || !params.to || !params.bytes){
+        this.ctx.body = error("参数错误");
+        return;
+      }
+      
+      let info = await eos.getInfo({});
+      const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
+      await eoss.transaction(tr => {
+        tr.buyrambytes({
+            payer: params.from,
+            receiver: params.to,
+            bytes: parseInt(params.bytes)
+        })}).then((r)=>{
+        this.ctx.body = success(r);
+      }).catch((e)=>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+      this.ctx.body = error(e);
+    }
+  }
+  
+  /**
+   * sellram
+   */
+  async eosSellRam(){
+    const { ctx } = this;
+    try{
+      let params = ctx.request.body;
+      if(!params.from || !params.pk || !params.bytes){
+        this.ctx.body = error("参数错误");
+        return;
+      }
+      
+      let info = await eos.getInfo({});
+      const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
+      await eoss.transaction(tr => {
+        tr.sellram({
+            account: params.from,
+            bytes: parseInt(params.bytes)
+        })}).then((r)=>{
+        this.ctx.body = success(r);
+      }).catch((e)=>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+      this.ctx.body = error(e);
+    }
+  }
+  
+  /**
+   * 抵押net cpu
+   */
+  async eosDelegatebw(){
+    const { ctx } = this;
+    try{
+      let params = ctx.request.body;
+      if(!params.from || !params.to || !params.pk || !params.stake_net_quantity || !params.stake_cpu_quantity){
+        this.ctx.body = error("参数错误");
+        return;
+      }
+      
+      let info = await eos.getInfo({});
+      const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
+      await eoss.transaction(tr => {
+        tr.delegatebw({
+          from: params.from,
+          receiver: params.to,
+          stake_net_quantity:params.stake_net_quantity,
+          stake_cpu_quantity:params.stake_cpu_quantity,
+          transfer: 0
+        })
+      }).then(result => {
+        if(result){
+          this.ctx.body = success(result);
+        }else{
+          this.ctx.body = error();
+        }
+      }).catch(e =>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+        this.ctx.body = error(e);
+    }
+  }
+  
+   /**
+   * 取消抵押net cpu
+   */
+  async eosUndelegatebw(){
+    const { ctx } = this;
+    try{
+      let params = ctx.request.body;
+      if(!params.from || !params.to || !params.pk || !params.unstake_net_quantity || !params.unstake_cpu_quantity){
+        this.ctx.body = error("参数错误");
+        return;
+      }
+      
+      let info = await eos.getInfo({});
+      const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
+      await eoss.transaction(tr => {
+        tr.undelegatebw({
+          from: params.from,
+          receiver: params.to,
+          unstake_net_quantity:params.unstake_net_quantity,
+          unstake_cpu_quantity:params.unstake_cpu_quantity,
+          transfer: 0
+        })
+      }).then(result => {
+        if(result){
+          this.ctx.body = success(result);
+        }else{
+          this.ctx.body = error();
+        }
+      }).catch(e =>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+        this.ctx.body = error(e);
     }
   }
 }
