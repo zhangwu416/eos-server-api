@@ -102,4 +102,5 @@ module.exports = app => {
   router.post('/eosSellRam', controller.home.eosSellRam);
   router.post('/eosDelegatebw', controller.home.eosDelegatebw);
   router.post('/eosUndelegatebw', controller.home.eosUndelegatebw);
+  router.post('/eosGetTableRows', controller.home.eosGetTableRows);
 };
