@@ -82,10 +82,24 @@ module.exports = app => {
    * @param {条数} size
    */
   router.get('/transactions/:account/:page/:size', controller.home.getTransactions);
-
-   /**
-   * 私钥获得账户名称
-   * @param {私钥} privatekey
+  
+    /**
+   * 私钥获得公钥
+   * @param {账户名称} account
    */
   router.get('/account/pk/:privatekey', controller.home.getAccountsByPrivateKey);
+
+  /**
+   * 购买ram
+   * @param {post body} 
+   * {
+   * to 转给账户,
+   * bytes 多少k
+   * mome 备注
+   * } 
+   */
+  router.post('/eosBuyRam', controller.home.eosBuyRam);
+  router.post('/eosSellRam', controller.home.eosSellRam);
+  router.post('/eosDelegatebw', controller.home.eosDelegatebw);
+  router.post('/eosUndelegatebw', controller.home.eosUndelegatebw);
 };
