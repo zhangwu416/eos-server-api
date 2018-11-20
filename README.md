@@ -32,6 +32,7 @@ $ open http://localhost:7001/
 $ npm start
 $ npm stop
 ```
+linux系统在安装时会有依赖报错，可以试试用yarn start启动
 
 ### config
 
