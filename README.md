@@ -32,7 +32,13 @@ $ open http://localhost:7001/
 $ npm start
 $ npm stop
 ```
-linux系统在安装时会有依赖报错，可以试试用yarn start启动
+linux系统在安装时会有依赖报错，可以试试用yarn start启动,方式如下
+npm install yarn@1.12.3 -g
+git clone https://github.com/zhangwu416/eos-server-api.git
+cd eos-server-api/
+yarn
+yarn start
+不用额外装egg相关模块，yarn命令会自动把package.json里面的依赖都装了
 
 ### config
 
