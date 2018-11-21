@@ -13,8 +13,11 @@ const pk = "5JF68Gsp3SLCXZ3xjvnumcUGLG93Z5PG75oRqdWdAWeY8MSA9xM";
 
 /**
  * eos服务
+ *测试节点 const eosServer = "http://jungle.cryptolions.io:18888"; 
+ *正式节点 const eosServer = "http://peer1.eoshuobipool.com:8181"; 
+ *const eosServer = "https://node1.zbeos.com"; 
  */
-const eosServer = "http://jungle.cryptolions.io:18888"; 
+const eosServer = "http://peer1.eoshuobipool.com:8181";
 
 /**
  * 主账户
