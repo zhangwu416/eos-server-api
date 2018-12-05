@@ -470,6 +470,31 @@ async getTransaction(){
       this.ctx.body = error(e);
     }
   }
+    
+    /**
+   *转账记录
+   */
+  async eosGetAccountACtion(){
+    const { ctx } = this;
+    try{
+     let params = ctx.params;
+     if(!params.account){
+       this.ctx.body = error("参数错误");
+       return;
+     }
+     await eos.getActions({"account_name":params.account, "pos":0, "offset":20}).then(result => {
+        if(result){
+          this.ctx.body = success(result);;
+        }else{
+          this.ctx.body = error();
+        }
+      }).catch(e=>{
+        this.ctx.body = error(e);
+      });
+    }catch(e){
+      this.ctx.body = error(e);
+    }
+  }
 }
 
 module.exports = HomeController;
