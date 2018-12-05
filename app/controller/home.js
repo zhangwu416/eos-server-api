@@ -482,7 +482,7 @@ async getTransaction(){
        this.ctx.body = error("参数错误");
        return;
      }
-     await eos.getActions({"account_name":params.account, "pos":0, "offset":20}).then(result => {
+     await eos.getActions({"account_name":params.account, "pos":params.page, "offset":params.size}).then(result => {
         if(result){
           this.ctx.body = success(result);;
         }else{
