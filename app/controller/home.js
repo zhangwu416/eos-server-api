@@ -17,7 +17,8 @@ const pk = "5JF68Gsp3SLCXZ3xjvnumcUGLG93Z5PG75oRqdWdAWeY8MSA9xM";
  *正式节点 const eosServer = "http://peer1.eoshuobipool.com:8181"; 
  *const eosServer = "https://node1.zbeos.com"; 
  */
-const eosServer = "https://proxy.eosnode.tools";
+
+const eosServer = "https://proxy.eosnode.tools"; 
 
 /**
  * 主账户
@@ -173,9 +174,8 @@ class HomeController extends Controller {
         return;
       }
       if (!params.mome){
-        params.mome='';
+	params.mome='';
       }
-        
       let info = await eos.getInfo({});
       const eoss = Eos.Localnet({binaryen,chainId:info.chain_id,keyProvider:[params.pk],httpEndpoint:eosServer});
       await eoss.transfer({from:params.from, to:params.to, quantity:params.quantity, memo:params.mome}).then((r)=>{
@@ -451,9 +451,9 @@ async getTransaction(){
         this.ctx.body = error(e);
     }
   }
-    /**
-   *ram价格
-   */
+/**
+ *    *ram价格
+ *       */
   async eosGetTableRows(){
     const { ctx } = this;  
     try{
@@ -470,10 +470,10 @@ async getTransaction(){
       this.ctx.body = error(e);
     }
   }
-    
-    /**
-   *转账记录
-   */
+
+/**
+ *    *转账记录
+ *       */
   async eosGetAccountACtion(){
     const { ctx } = this;
     try{
@@ -495,6 +495,7 @@ async getTransaction(){
       this.ctx.body = error(e);
     }
   }
+
 }
 
 module.exports = HomeController;
