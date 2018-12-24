@@ -17,7 +17,7 @@ const pk = "5JF68Gsp3SLCXZ3xjvnumcUGLG93Z5PG75oRqdWdAWeY8MSA9xM";
  *正式节点 const eosServer = "http://peer1.eoshuobipool.com:8181"; 
  *const eosServer = "https://node1.zbeos.com"; 
  */
-const eosServer = "http://peer1.eoshuobipool.com:8181";
+const eosServer = "https://proxy.eosnode.tools";
 
 /**
  * 主账户
